@@ -22,9 +22,10 @@ ADMIN_USERNAME = "admin"
 ADMIN_PASSWORD = "admin123"
 
 # Google Sign-In
-GOOGLE_CLIENT_ID = "312451195394-e1f23atprh8n8v5l3nf9obdmb6mk2pfn.apps.googleusercontent.com"
-GOOGLE_ALLOWED_EMAIL = "halima.nadeem8@gmail.com"
+import os
 
+GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", "")
+GOOGLE_ALLOWED_EMAIL = os.environ.get("GOOGLE_ALLOWED_EMAIL", "")
 
 # ============================================================
 # DATABASE
