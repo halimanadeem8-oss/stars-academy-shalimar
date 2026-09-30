@@ -20,8 +20,7 @@ DATABASE = "academy.db"
 # CHANGE THESE BEFORE USING THIS FOR A REAL CLIENT
 ADMIN_USERNAME = "admin"
 ADMIN_PASSWORD = "admin123"
-
-# Google Sign-In
+#Google sign in
 import os
 
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", "")
