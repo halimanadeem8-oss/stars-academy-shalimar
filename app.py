@@ -163,26 +163,26 @@ NAV_HTML = """
 <div class="navbar">
     <div style="display:flex;align-items:center;gap:12px;">
         <button class="menu-btn" type="button" onclick="openMenu()" aria-label="Open menu">☰</button>
-        <a href="{{ url_for('dashboard') }}" class="brand">Stars Academy<small>Shalimar Branch</small></a>
+        <a href="/dashboard" class="brand">Stars Academy<small>Shalimar Branch</small></a>
     </div>
     <div class="nav-right">
-        <span>{{ session.get('username','Admin') }}</span>
-        <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+        <span>Admin</span>
+        <a href="/logout" class="logout-btn">Logout</a>
     </div>
 </div>
 <div id="menuOverlay" class="menu-overlay" onclick="closeMenu()"></div>
 <aside id="sideMenu" class="side-menu">
     <button class="close-menu" type="button" onclick="closeMenu()">×</button>
     <h2>Stars Academy</h2><p>Shalimar Branch</p>
-    <a href="{{ url_for('dashboard') }}">⌂ Home</a>
-    <a href="{{ url_for('students') }}">👨‍🎓 Students</a>
-    <a href="{{ url_for('attendance') }}">✓ Attendance</a>
-    <a href="{{ url_for('dashboard') }}#admissions">▣ Admissions</a>
-    <a href="{{ url_for('dashboard') }}#faculty">♙ Faculty</a>
-    <a href="{{ url_for('dashboard') }}#announcements">▣ Announcements</a>
-    <a href="{{ url_for('dashboard') }}#about">ⓘ About Academy</a>
-    <a href="{{ url_for('dashboard') }}#contact">☎ Contact</a>
-    <a href="{{ url_for('logout') }}">↪ Logout</a>
+    <a href="/dashboard">⌂ Home</a>
+    <a href="/students">👨‍🎓 Students</a>
+    <a href="/attendance">✓ Attendance</a>
+    <a href="/dashboard#admissions">▣ Admissions</a>
+    <a href="/dashboard#faculty">♙ Faculty</a>
+    <a href="/dashboard#announcements">▣ Announcements</a>
+    <a href="/dashboard#about">ⓘ About Academy</a>
+    <a href="/dashboard#contact">☎ Contact</a>
+    <a href="/logout">↪ Logout</a>
 </aside>
 <script>
 function openMenu(){document.getElementById('sideMenu').classList.add('open');document.getElementById('menuOverlay').classList.add('open')}
@@ -1008,4 +1008,3 @@ if __name__ == "__main__":
         host="0.0.0.0",
         port=int(os.environ.get("PORT", 5000))
     )
-
