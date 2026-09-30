@@ -78,6 +78,24 @@ def init_database():
         )
     """)
 
+    # Admissions table
+    db.execute("""
+        CREATE TABLE IF NOT EXISTS admissions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            student_name TEXT NOT NULL,
+            guardian_name TEXT NOT NULL,
+            dob TEXT NOT NULL,
+            gender TEXT NOT NULL,
+            class_name TEXT NOT NULL,
+            phone TEXT NOT NULL,
+            email TEXT,
+            address TEXT NOT NULL,
+            previous_school TEXT,
+            admission_date TEXT NOT NULL,
+            submitted_at TEXT NOT NULL
+        )
+    """)
+
     # Create admin account if it does not exist
     existing_admin = db.execute(
         "SELECT * FROM admins WHERE username = ?",
@@ -151,7 +169,7 @@ button,input,select{font:inherit}
 .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}.search-box,.select-box,input,select{border:1px solid #dbe2ec;border-radius:9px;padding:11px 12px;background:#fff;outline:none}.search-box{min-width:290px;flex:1}
 .student-table-wrapper{background:#fff;border:1px solid #e8edf5;border-radius:15px;overflow:auto;box-shadow:0 5px 22px rgba(20,34,65,.06)}table{width:100%;border-collapse:collapse;min-width:780px}th,td{padding:14px 15px;text-align:left;border-bottom:1px solid #edf0f5}th{background:#f8f9fc;color:#687386;font-size:12px;text-transform:uppercase}td{font-size:14px}.action-buttons{display:flex;gap:7px;flex-wrap:wrap}
 .status{display:inline-block;padding:5px 9px;border-radius:20px;font-size:12px;font-weight:800}.paid,.present-status{background:#dff4e9;color:#176344}.partial,.not-marked-status{background:#fff2cf;color:#8a6a17}.unpaid,.absent-status{background:#fde4e4;color:#9c2e2e}
-.form-card{max-width:650px;background:#fff;border:1px solid #e8edf5;border-radius:16px;padding:28px;box-shadow:0 5px 22px rgba(20,34,65,.07)}.form-group{margin-bottom:17px}.form-group label{display:block;font-weight:800;margin-bottom:7px}.form-group input,.form-group select{width:100%}.form-submit{width:100%;margin-top:8px}.back-button{display:inline-block;margin-bottom:18px;color:#6d5721;font-weight:800}
+.form-card{max-width:650px;background:#fff;border:1px solid #e8edf5;border-radius:16px;padding:28px;box-shadow:0 5px 22px rgba(20,34,65,.07)}.form-group{margin-bottom:17px}.form-group label{display:block;font-weight:800;margin-bottom:7px}.form-group input,.form-group select{width:100%}.form-submit{width:100%;margin-top:8px}.admission-card{max-width:900px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.form-group.full{grid-column:1 / -1}.required-star{color:#b43a36}.success-box{background:#dff4e9;color:#176344;border:1px solid #b9e3cc;padding:16px;border-radius:12px;margin-bottom:20px;font-weight:700}.success-box span{display:block;font-weight:500;margin-top:5px}.form-help{font-size:12px;color:#7a8494;margin-top:5px}@media(max-width:700px){.form-grid{grid-template-columns:1fr}.form-group.full{grid-column:auto}}.back-button{display:inline-block;margin-bottom:18px;color:#6d5721;font-weight:800}
 .alert{padding:11px 14px;border-radius:9px;margin:12px 0}.alert.error{background:#fde4e4;color:#9c2e2e}.alert.success{background:#dff4e9;color:#176344}
 .login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:25px;background:linear-gradient(135deg,#101b3d,#1c315f)}.login-box{width:min(430px,100%);background:#fff;border-radius:20px;padding:34px;box-shadow:0 18px 55px rgba(0,0,0,.22)}.login-title{text-align:center;color:#101b3d;margin:0}.login-subtitle{text-align:center;color:#687386;line-height:1.6;margin:7px 0 25px}.login-box .form-group input{width:100%}.login-button{width:100%;border:0;border-radius:9px;background:#c9a54a;color:#101b3d;padding:12px;font-weight:900;cursor:pointer}
 .footer{margin-top:35px;padding:25px;text-align:center;color:#7a8494;font-size:13px}
@@ -177,7 +195,7 @@ NAV_HTML = """
     <a href="/dashboard">⌂ Home</a>
     <a href="/students">👨‍🎓 Students</a>
     <a href="/attendance">✓ Attendance</a>
-    <a href="/dashboard#admissions">▣ Admissions</a>
+    <a href="/admissions">▣ Admissions</a>
     <a href="/dashboard#faculty">♙ Faculty</a>
     <a href="/dashboard#announcements">▣ Announcements</a>
     <a href="/dashboard#about">ⓘ About Academy</a>
@@ -400,6 +418,189 @@ def google_login():
 
     except Exception as e:
         return {"success": False, "message": f"Google sign-in error: {str(e)}"}, 500
+
+
+# ============================================================
+# ADMISSIONS PAGE
+# ============================================================
+
+ADMISSIONS_PAGE = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stars Academy | Admissions</title>
+    {{ style|safe }}
+</head>
+<body>
+{{ nav|safe }}
+
+<div class="container">
+    <a href="/dashboard" class="back-button">← Back to Home</a>
+
+    <div class="hero">
+        <span class="hero-badge">ADMISSIONS</span>
+        <h1>Admission Application</h1>
+        <p>Fill in the form below to submit a new student admission application to Stars Academy, Shalimar Branch.</p>
+    </div>
+
+    {% if submitted %}
+    <div class="success-box">
+        ✓ Admission application submitted successfully!
+        <span>Application for <strong>{{ student_name }}</strong> has been received by Stars Academy.</span>
+    </div>
+    {% endif %}
+
+    {% with messages=get_flashed_messages(with_categories=true) %}
+        {% for category,message in messages %}
+            <div class="alert {{ category }}">{{ message }}</div>
+        {% endfor %}
+    {% endwith %}
+
+    <div class="form-card admission-card">
+        <h2 style="margin-top:0;color:#101b3d">Student Information</h2>
+        <p class="subtitle">Please provide accurate information. Fields marked with <span class="required-star">*</span> are required.</p>
+
+        <form method="POST" action="/admissions" autocomplete="on">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="student_name">Student Full Name <span class="required-star">*</span></label>
+                    <input id="student_name" name="student_name" type="text" placeholder="Enter student's full name" value="{{ form_data.get('student_name','') }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="guardian_name">Father / Guardian Name <span class="required-star">*</span></label>
+                    <input id="guardian_name" name="guardian_name" type="text" placeholder="Enter father or guardian name" value="{{ form_data.get('guardian_name','') }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="dob">Date of Birth <span class="required-star">*</span></label>
+                    <input id="dob" name="dob" type="date" value="{{ form_data.get('dob','') }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="gender">Gender <span class="required-star">*</span></label>
+                    <select id="gender" name="gender" required>
+                        <option value="">Select gender</option>
+                        <option value="Male" {% if form_data.get('gender') == 'Male' %}selected{% endif %}>Male</option>
+                        <option value="Female" {% if form_data.get('gender') == 'Female' %}selected{% endif %}>Female</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="class_name">Class Applying For <span class="required-star">*</span></label>
+                    <select id="class_name" name="class_name" required>
+                        <option value="">Select class</option>
+                        {% for class_option in ['Playgroup','Nursery','Prep','1','2','3','4','5','6','7','8','9','10'] %}
+                        <option value="{{ class_option }}" {% if form_data.get('class_name') == class_option %}selected{% endif %}>Class {{ class_option }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number <span class="required-star">*</span></label>
+                    <input id="phone" name="phone" type="tel" placeholder="03XX-XXXXXXX" value="{{ form_data.get('phone','') }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input id="email" name="email" type="email" placeholder="example@email.com" value="{{ form_data.get('email','') }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="admission_date">Preferred Admission Date <span class="required-star">*</span></label>
+                    <input id="admission_date" name="admission_date" type="date" value="{{ form_data.get('admission_date', today) }}" required>
+                </div>
+
+                <div class="form-group full">
+                    <label for="previous_school">Previous School</label>
+                    <input id="previous_school" name="previous_school" type="text" placeholder="Enter previous school name (if applicable)" value="{{ form_data.get('previous_school','') }}">
+                </div>
+
+                <div class="form-group full">
+                    <label for="address">Home Address <span class="required-star">*</span></label>
+                    <input id="address" name="address" type="text" placeholder="Enter complete home address" value="{{ form_data.get('address','') }}" required>
+                </div>
+            </div>
+
+            <p class="form-help">By submitting this form, the admission information will be saved in the academy's admission records.</p>
+            <button class="form-submit" type="submit">Submit Admission Application</button>
+        </form>
+    </div>
+
+    <div class="footer">Stars Academy | Shalimar Branch • Admissions</div>
+</div>
+</body>
+</html>
+"""
+
+
+# ============================================================
+# ADMISSIONS
+# ============================================================
+
+@app.route("/admissions", methods=["GET", "POST"])
+@login_required
+def admissions():
+
+    form_data = {}
+    submitted = False
+
+    if request.method == "POST":
+        form_data = {
+            "student_name": request.form.get("student_name", "").strip(),
+            "guardian_name": request.form.get("guardian_name", "").strip(),
+            "dob": request.form.get("dob", "").strip(),
+            "gender": request.form.get("gender", "").strip(),
+            "class_name": request.form.get("class_name", "").strip(),
+            "phone": request.form.get("phone", "").strip(),
+            "email": request.form.get("email", "").strip(),
+            "address": request.form.get("address", "").strip(),
+            "previous_school": request.form.get("previous_school", "").strip(),
+            "admission_date": request.form.get("admission_date", "").strip(),
+        }
+
+        required_fields = [
+            "student_name", "guardian_name", "dob", "gender",
+            "class_name", "phone", "address", "admission_date"
+        ]
+
+        if any(not form_data[field] for field in required_fields):
+            flash("Please fill in all required fields.", "error")
+        else:
+            db = get_db()
+            db.execute("""
+                INSERT INTO admissions (
+                    student_name, guardian_name, dob, gender, class_name,
+                    phone, email, address, previous_school, admission_date, submitted_at
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
+            """, (
+                form_data["student_name"],
+                form_data["guardian_name"],
+                form_data["dob"],
+                form_data["gender"],
+                form_data["class_name"],
+                form_data["phone"],
+                form_data["email"],
+                form_data["address"],
+                form_data["previous_school"],
+                form_data["admission_date"]
+            ))
+            db.commit()
+            db.close()
+            submitted = True
+
+    return render_template_string(
+        ADMISSIONS_PAGE,
+        style=BASE_STYLE,
+        nav=NAV_HTML,
+        form_data=form_data,
+        submitted=submitted,
+        student_name=form_data.get("student_name", ""),
+        today=date.today().isoformat()
+    )
 
 
 # ============================================================
