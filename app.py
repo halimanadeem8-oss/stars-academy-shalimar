@@ -1675,10 +1675,6 @@ def google_login():
         session["google_email"] = google_email
         return {"success": True, "redirect": url_for("dashboard")}
 
-    except ValueError:
-        return {"success": False, "message": "Google sign-in verification failed."}, 401
-    except Exception:
-        return {"success": False, "message": "Google sign-in could not be completed."}, 500
     except Exception as e:
         return {"success": False, "message": f"Google sign-in error: {str(e)}"}, 500
 
