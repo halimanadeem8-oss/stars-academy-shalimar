@@ -1679,7 +1679,8 @@ def google_login():
         return {"success": False, "message": "Google sign-in verification failed."}, 401
     except Exception:
         return {"success": False, "message": "Google sign-in could not be completed."}, 500
-
+    except Exception as e:
+        return {"success": False, "message": f"Google sign-in error: {str(e)}"}, 500
 
 # ============================================================
 # DASHBOARD
