@@ -12,19 +12,24 @@ app = Flask(__name__)
 # SETTINGS
 # ============================================================
 
-app.secret_key = "CHANGE_THIS_TO_A_LONG_RANDOM_SECRET_KEY"
-
-DATABASE = "academy.db"
-
-# Default login
-# CHANGE THESE BEFORE USING THIS FOR A REAL CLIENT
-ADMIN_USERNAME = "admin"
-ADMIN_PASSWORD = "admin123"
-#Google sign in
 import os
 
+# Secret key: set SECRET_KEY in Render for production.
+app.secret_key = os.environ.get(
+    "SECRET_KEY",
+    "dev-only-change-this-secret-key"
+)
+
+DATABASE = os.environ.get("DATABASE_PATH", "academy.db")
+
+# Default username/password login.
+# For production, set ADMIN_USERNAME and ADMIN_PASSWORD in Render.
+ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME", "admin")
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "admin123")
+
+# Google Sign-In
+# Any Google account with a verified email may sign in.
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", "")
-GOOGLE_ALLOWED_EMAIL = os.environ.get("GOOGLE_ALLOWED_EMAIL", "")
 
 # ============================================================
 # DATABASE
@@ -1655,14 +1660,12 @@ def google_login():
             return {"success": False, "message": "Your Google email is not verified."}, 403
 
         google_email = idinfo.get("email", "").strip().lower()
-        allowed_email = GOOGLE_ALLOWED_EMAIL.strip().lower()
 
-        if not allowed_email or allowed_email == "your_google_email_here":
-            return {"success": False, "message": "Google sign-in is not configured for an authorized academy email yet."}, 403
+        if not google_email:
+            return {"success": False, "message": "Google did not provide an email address."}, 403
 
-        if google_email != allowed_email:
-            return {"success": False, "message": "This Google account is not authorized for the academy dashboard."}, 403
-
+        # IMPORTANT: There is intentionally NO allowed-email check here.
+        # Any Google account with a verified email can sign in.
         db = get_db()
         admin = db.execute("SELECT * FROM admins WHERE username = ?", (ADMIN_USERNAME,)).fetchone()
         db.close()
@@ -1677,6 +1680,7 @@ def google_login():
 
     except Exception as e:
         return {"success": False, "message": f"Google sign-in error: {str(e)}"}, 500
+
 
 # ============================================================
 # DASHBOARD
@@ -2266,16 +2270,16 @@ def logout():
     )
 
 
+
 # ============================================================
 # START APPLICATION
 # ============================================================
+
 init_database()
 
 if __name__ == "__main__":
-    init_database()
- 
     app.run(
-        debug=True,
-        host="127.0.0.1",
-        port=5000
+        debug=False,
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 5000))
     )
