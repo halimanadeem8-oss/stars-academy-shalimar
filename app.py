@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, url_for, session, render_template_string, flash
+from flask import Flask, request, redirect, url_for, session, render_template_string, flash, send_from_directory
 import sqlite3
 from datetime import date
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -7,6 +7,11 @@ from google.oauth2 import id_token
 from google.auth.transport import requests as google_requests
 
 app = Flask(__name__)
+
+# Serve the principal picture uploaded in the repository root.
+@app.route("/principal.jfif")
+def principal_picture():
+    return send_from_directory(os.path.dirname(os.path.abspath(__file__)), "principal.jfif")
 
 # ============================================================
 # SETTINGS
@@ -285,7 +290,7 @@ DASHBOARD_PAGE = """
 
 <section class="section" id="about"><h2>About Stars Academy</h2><div class="info-card"><p>Stars Academy — Shalimar Branch is presented as a modern, organized learning environment with student management and attendance tools.</p></div></section>
 
-<section class="section" id="principal"><h2>Principal's Message</h2><div class="principal-card"><img class="principal-photo" src="/principal.jfif" alt="Principal Halima"><div><h3 style="margin:0;color:#101b3d">Principal Halima</h3><p style="color:#687386;line-height:1.7">“Our aim is to provide students with a focused, respectful and encouraging environment where every student can grow.”</p></div></div></section>
+<section class="section" id="principal"><h2>Principal's Message</h2><div class="principal-card"><img class="principal-photo" src="/static/principal.jpg" alt="Principal Halima"><div><h3 style="margin:0;color:#101b3d">Principal Halima</h3><p style="color:#687386;line-height:1.7">“Our aim is to provide students with a focused, respectful and encouraging environment where every student can grow.”</p></div></div></section>
 
 <section class="section" id="contact"><h2>Contact</h2><div class="info-grid"><div class="info-card"><h3>Branch</h3><p>Stars Academy<br>Shalimar Branch</p></div><div class="info-card"><h3>Office</h3><p>For admissions and academy information, contact the branch office.</p></div><div class="info-card"><h3>Management</h3><p>Academy management can use this dashboard to maintain student records and attendance.</p></div></div></section>
 <div class="footer">© Stars Academy | Shalimar Branch</div>
