@@ -265,7 +265,7 @@ function setupGoogle(){
     if(!clientId) return;
     google.accounts.id.initialize({client_id:clientId,callback:handleGoogleResponse});
     google.accounts.id.renderButton(document.getElementById("google-login-button"),
-        {theme:"outline",size:"large",width:330,text:"continue_with",shape:"rectangular"});
+        {theme:"outline",size:"large",width:Math.min(330, document.getElementById("google-login-button").clientWidth || 330),text:"continue_with",shape:"rectangular"});
 }
 window.addEventListener("load",setupGoogle);
 setTimeout(setupGoogle,1500);
