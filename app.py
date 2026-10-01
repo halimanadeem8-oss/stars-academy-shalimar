@@ -174,11 +174,38 @@ button,input,select{font:inherit}
 .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}.search-box,.select-box,input,select{border:1px solid #dbe2ec;border-radius:9px;padding:11px 12px;background:#fff;outline:none}.search-box{min-width:290px;flex:1}
 .student-table-wrapper{background:#fff;border:1px solid #e8edf5;border-radius:15px;overflow:auto;box-shadow:0 5px 22px rgba(20,34,65,.06)}table{width:100%;border-collapse:collapse;min-width:780px}th,td{padding:14px 15px;text-align:left;border-bottom:1px solid #edf0f5}th{background:#f8f9fc;color:#687386;font-size:12px;text-transform:uppercase}td{font-size:14px}.action-buttons{display:flex;gap:7px;flex-wrap:wrap}
 .status{display:inline-block;padding:5px 9px;border-radius:20px;font-size:12px;font-weight:800}.paid,.present-status{background:#dff4e9;color:#176344}.partial,.not-marked-status{background:#fff2cf;color:#8a6a17}.unpaid,.absent-status{background:#fde4e4;color:#9c2e2e}
-.form-card{max-width:650px;background:#fff;border:1px solid #e8edf5;border-radius:16px;padding:28px;box-shadow:0 5px 22px rgba(20,34,65,.07)}.form-group{margin-bottom:17px}.form-group label{display:block;font-weight:800;margin-bottom:7px}.form-group input,.form-group select{width:100%}.form-submit{width:100%;margin-top:8px}.admission-card{max-width:900px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.form-group.full{grid-column:1 / -1}.required-star{color:#b43a36}.success-box{background:#dff4e9;color:#176344;border:1px solid #b9e3cc;padding:16px;border-radius:12px;margin-bottom:20px;font-weight:700}.success-box span{display:block;font-weight:500;margin-top:5px}.form-help{font-size:12px;color:#7a8494;margin-top:5px}@media(max-width:700px){.form-grid{grid-template-columns:1fr}.form-group.full{grid-column:auto}}.back-button{display:inline-block;margin-bottom:18px;color:#6d5721;font-weight:800}
+.form-card{max-width:650px;background:#fff;border:1px solid #e8edf5;border-radius:16px;padding:28px;box-shadow:0 5px 22px rgba(20,34,65,.07)}.form-group{margin-bottom:17px}.form-group label{display:block;font-weight:800;margin-bottom:7px}.form-group input,.form-group select{width:100%}.form-submit{width:100%;margin-top:8px}.admission-card{max-width:900px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.form-group.full{grid-column:1 / -1}.required-star{color:#b43a36}.success-box{background:#dff4e9;color:#176344;border:1px solid #b9e3cc;padding:16px;border-radius:12px;margin-bottom:20px;font-weight:700}.success-box span{display:block;font-weight:500;margin-top:5px}.form-help{font-size:12px;color:#7a8494;margin-top:5px}.back-button{display:inline-block;margin-bottom:18px;color:#6d5721;font-weight:800}
 .alert{padding:11px 14px;border-radius:9px;margin:12px 0}.alert.error{background:#fde4e4;color:#9c2e2e}.alert.success{background:#dff4e9;color:#176344}
 .login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:25px;background:linear-gradient(135deg,#101b3d,#1c315f)}.login-box{width:min(430px,100%);background:#fff;border-radius:20px;padding:34px;box-shadow:0 18px 55px rgba(0,0,0,.22)}.login-title{text-align:center;color:#101b3d;margin:0}.login-subtitle{text-align:center;color:#687386;line-height:1.6;margin:7px 0 25px}.login-box .form-group input{width:100%}.login-button{width:100%;border:0;border-radius:9px;background:#c9a54a;color:#101b3d;padding:12px;font-weight:900;cursor:pointer}
 .footer{margin-top:35px;padding:25px;text-align:center;color:#7a8494;font-size:13px}
-@media(max-width:800px){.stats,.info-grid,.dashboard-grid{grid-template-columns:1fr}.navbar{padding:0 15px}.nav-right>span,.nav-link{display:none}.hero{padding:28px}.hero h1{font-size:29px}.principal-card{flex-direction:column;text-align:center}.search-box{min-width:100%}}
+@media(max-width:800px){
+html,body{width:100%;max-width:100%;overflow-x:hidden}
+.navbar{height:64px;padding:0 12px}
+.brand{font-size:18px}.brand small{font-size:9px}
+.nav-right>span,.nav-link{display:none}
+.container{width:100%;max-width:100%;padding:22px 14px 45px;margin:0}
+.hero{padding:25px 20px;border-radius:15px}.hero h1{font-size:28px;line-height:1.2}.hero p{font-size:14px}
+.page-title{font-size:27px}
+.stats,.info-grid,.dashboard-grid{grid-template-columns:1fr}
+.stat-card,.panel,.info-card{width:100%}
+.menu-grid{grid-template-columns:1fr}
+.principal-card{flex-direction:column;text-align:center;padding:20px}
+.principal-photo{width:125px;height:125px}
+.toolbar{flex-direction:column}.search-box{min-width:0;width:100%}
+.toolbar select,.toolbar button,.toolbar a{width:100%;text-align:center}
+.form-grid{grid-template-columns:1fr}.form-group.full{grid-column:auto}
+.form-card{width:100%;max-width:100%;padding:20px}
+.login-page{padding:15px}.login-box{width:100%;max-width:430px;padding:25px 20px}
+.student-table-wrapper{width:100%;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{min-width:700px}
+.graph{gap:35px}.footer{padding:20px 10px}
+}
+@media(max-width:480px){
+.container{padding-left:12px;padding-right:12px}
+.hero h1{font-size:25px}.hero{padding:22px 17px}
+.stat-number{font-size:30px}.attendance-percent{font-size:42px}
+.panel,.stat-card,.info-card{padding:18px}.form-card{padding:17px}
+}
 </style>
 """
 
@@ -215,7 +242,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')closeMenu()}
 """
 
 LOGIN_PAGE = """
-<!DOCTYPE html><html><head><title>Stars Academy | Login</title>{{ style|safe }}</head>
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Stars Academy | Login</title>{{ style|safe }}</head>
 <body>
 <div class="login-page"><div class="login-box">
 <h1 class="login-title">Stars Academy</h1>
@@ -261,7 +288,7 @@ async function handleGoogleResponse(response){
 """
 
 DASHBOARD_PAGE = """
-<!DOCTYPE html><html><head><title>Home | Stars Academy</title>{{ style|safe }}</head><body>
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Home | Stars Academy</title>{{ style|safe }}</head><body>
 {{ nav|safe }}
 <div class="container">
 <section class="hero" id="home">
@@ -298,7 +325,7 @@ DASHBOARD_PAGE = """
 """
 
 STUDENTS_PAGE = """
-<!DOCTYPE html><html><head><title>Students | Stars Academy</title>{{ style|safe }}</head><body>
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Students | Stars Academy</title>{{ style|safe }}</head><body>
 {{ nav|safe }}<div class="container">
 <a href="{{ url_for('dashboard') }}" class="back-button">← Back to Home</a>
 <h1 class="page-title">Students</h1><p class="subtitle">Manage academy student records.</p>
@@ -315,7 +342,7 @@ STUDENTS_PAGE = """
 """
 
 STUDENT_FORM_PAGE = """
-<!DOCTYPE html><html><head><title>{{ page_title }} | Stars Academy</title>{{ style|safe }}</head><body>
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>{{ page_title }} | Stars Academy</title>{{ style|safe }}</head><body>
 {{ nav|safe }}<div class="container"><a href="{{ url_for('students') }}" class="back-button">← Back to Students</a>
 <div class="form-card"><h1 class="page-title">{{ page_title }}</h1><p class="subtitle">Enter the student's information below.</p>
 {% with messages=get_flashed_messages(with_categories=true) %}{% for category,message in messages %}<div class="alert {{ category }}">{{ message }}</div>{% endfor %}{% endwith %}
@@ -327,7 +354,7 @@ STUDENT_FORM_PAGE = """
 """
 
 ATTENDANCE_PAGE = """
-<!DOCTYPE html><html><head><title>Attendance | Stars Academy</title>{{ style|safe }}</head><body>
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Attendance | Stars Academy</title>{{ style|safe }}</head><body>
 {{ nav|safe }}<div class="container"><a href="{{ url_for('dashboard') }}" class="back-button">← Back to Home</a>
 <h1 class="page-title">Today's Attendance</h1><p class="subtitle">{{ today }}</p>
 {% with messages=get_flashed_messages(with_categories=true) %}{% for category,message in messages %}<div class="alert {{ category }}">{{ message }}</div>{% endfor %}{% endwith %}
